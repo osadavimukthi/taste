@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Taste</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="logo-area">
+            <div class="logo-container">
+                <img src="logo.png" alt="Taste Logo" class="logo">
+                <h1 class="restaurant-name">Taste</h1>
+            </div>
+        </div>
+        <div class="search-area" style="flex:1; display:flex; justify-content:center;">
+            <!-- Checkout page minimal header -->
+        </div>
+        <div class="icons-area">
+            <button onclick="window.location.href='index.html'" class="back-btn">&larr; Back</button>
+            <button class="mode-toggle" aria-label="Toggle light/dark mode">🌙</button>
+        </div>
+    </header>
+
+    <main class="checkout">
+        <h1>Order Invoice</h1>
+        <table class="bill-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="bill-items">
+                <!-- rows injected via JS -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td id="bill-total">LKR 0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="bill-actions">
+            <button id="confirm-order" class="btn primary">Confirm Order</button>
+            <button id="back-menu" class="btn secondary">Back to Menu</button>
+        </div>
+    </main>
+
+    <script>
+        // populate bill from localStorage
+        function loadCart() {
+            const stored = localStorage.getItem('taste-cart');
+            return stored ? JSON.parse(stored) : [];
+        }
+        
+        function formatPrice(amount) {
+            return `LKR ${amount}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = loadCart();
+            const tbody = document.getElementById('bill-items');
+            let total = 0;
+
+            cart.forEach(item => {
+                const row = document.createElement('tr');
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${formatPrice(item.price)}</td>
+                    <td>${formatPrice(subtotal)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('bill-total').textContent = formatPrice(total);
+
+            document.getElementById('back-menu').addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+            document.getElementById('confirm-order').addEventListener('click', () => {
+                alert('Order confirmed!');
+                localStorage.removeItem('taste-cart');
+                window.location.href = 'index.html';
+            });
+
+            // handle theme toggle
+            const modeToggle = document.querySelector('.mode-toggle');
+            const savedTheme = localStorage.getItem('taste-theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            modeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+            modeToggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                const next = current === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('taste-theme', next);
+                modeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+                modeToggle.classList.add('rotated');
+                setTimeout(() => modeToggle.classList.remove('rotated'), 500);
+            });
+        });
+    </script>
+    <footer class="site-footer">
+        <div class="footer-section">
+            <h4>Taste</h4>
+            <p>Delicious food made with love.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Contact</h4>
+            <p>Email: info@taste.com</p>
+            <p>Phone: +94 77 123 4567</p>
+        </div>
+        <div class="footer-section">
+            <h4>Address</h4>
+            <p>123 Food Street</p>
+            <p>Colombo, Sri Lanka</p>
+        </div>
+        <div class="footer-section social-icons">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+        </div>
+        <div class="footer-section" style="width:100%; text-align:center; margin-top:1rem; font-size:0.8rem; color:#777;">
+            &copy; 2026 Taste. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

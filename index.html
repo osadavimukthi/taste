@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste - Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="logo-area">
+            <div class="logo-container">
+                <img src="logo.png" alt="Taste Logo" class="logo">
+                <h1 class="restaurant-name">Taste</h1>
+            </div>
+        </div>
+        <div class="search-area">
+            <input type="text" class="search-bar" placeholder="Search for delicious food...">
+        </div>
+        <div class="icons-area">
+            <button class="cart-btn" aria-label="Cart">
+                🛒<span class="cart-count">0</span>
+            </button>
+            <button class="mode-toggle" aria-label="Toggle light/dark mode">🌙</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-overlay">
+                <h1>Delicious food made with love</h1>
+                <button class="browse-menu-btn">Browse Menu</button>
+            </div>
+        </section>
+
+        <nav class="category-tabs">
+            <button class="tab active" data-category="All">All</button>
+            <button class="tab" data-category="Main Meals">Main Meals</button>
+            <button class="tab" data-category="Bites">Bites</button>
+            <button class="tab" data-category="Drinks">Drinks</button>
+            <button class="tab" data-category="Desserts">Desserts</button>
+        </nav>
+
+        <section class="menu" id="menu">
+            <div class="cards">
+                <!-- Main Meals -->
+                <div class="food-card" data-category="Main Meals">
+                    <img src="rice and curry.png" alt="Rice and Curry">
+                    <h3>Rice and Curry</h3>
+                    <p>Traditional Sri Lankan rice and curry with spices.</p>
+                    <span class="price">LKR 500</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Main Meals">
+                    <img src="chicken pizza.png" alt="Chicken Pizza">
+                    <h3>Chicken Pizza</h3>
+                    <p>Loaded with cheese and grilled chicken.</p>
+                    <span class="price">LKR 1200</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Main Meals">
+                    <img src="fried rice.png" alt="Fried Rice">
+                    <h3>Fried Rice</h3>
+                    <p>Stir-fried rice with vegetables and protein.</p>
+                    <span class="price">LKR 700</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Main Meals">
+                    <img src="noodles.png" alt="Noodles">
+                    <h3>Noodles</h3>
+                    <p>Spicy stir-fried noodles with choice of meat.</p>
+                    <span class="price">LKR 650</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Main Meals">
+                    <img src="pasta.png" alt="Pasta">
+                    <h3>Pasta</h3>
+                    <p>Creamy pasta with garlic and herbs.</p>
+                    <span class="price">LKR 800</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <!-- Bites -->
+                <div class="food-card" data-category="Bites">
+                    <img src="chicken fries.png" alt="Chicken Fries">
+                    <h3>Chicken Fries</h3>
+                    <p>Crispy seasoned chicken fries.</p>
+                    <span class="price">LKR 400</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Bites">
+                    <img src="chicken nuggets.png" alt="Chicken Nuggets">
+                    <h3>Chicken Nuggets</h3>
+                    <p>Golden fried chicken nuggets.</p>
+                    <span class="price">LKR 450</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Bites">
+                    <img src="sandwitch.png" alt="Sandwiches">
+                    <h3>Sandwiches</h3>
+                    <p>Fresh sandwiches with your choice of fillings.</p>
+                    <span class="price">LKR 350</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Bites">
+                    <img src="garlic bread.png" alt="Garlic Bread">
+                    <h3>Garlic Bread</h3>
+                    <p>Warm bread with garlic butter.</p>
+                    <span class="price">LKR 300</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Bites">
+                    <img src="zpring rolls.png" alt="Spring Rolls">
+                    <h3>Spring Rolls</h3>
+                    <p>Veggie spring rolls served with sauce.</p>
+                    <span class="price">LKR 320</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <!-- Drinks -->
+                <div class="food-card" data-category="Drinks">
+                    <img src="cocacola.png" alt="Coca Cola">
+                    <h3>Coca Cola</h3>
+                    <p>Refreshing cola beverage.</p>
+                    <span class="price">LKR 150</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Drinks">
+                    <img src="sprite.png" alt="Sprite">
+                    <h3>Sprite</h3>
+                    <p>Lemon-lime soda.</p>
+                    <span class="price">LKR 150</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Drinks">
+                    <img src="cappuccino.png" alt="Cappuccino">
+                    <h3>Cappuccino</h3>
+                    <p>Hot espresso-based coffee.</p>
+                    <span class="price">LKR 250</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Drinks">
+                    <img src="mango juice.png" alt="Mango Juice">
+                    <h3>Mango Juice</h3>
+                    <p>Fresh mango juice.</p>
+                    <span class="price">LKR 200</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Drinks">
+                    <img src="orange juice.png" alt="Orange Juice">
+                    <h3>Orange Juice</h3>
+                    <p>Freshly squeezed orange juice.</p>
+                    <span class="price">LKR 200</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <!-- Desserts -->
+                <div class="food-card" data-category="Desserts">
+                    <img src="chocolate ice cream.png" alt="Chocolate Ice Cream">
+                    <h3>Chocolate Ice Cream</h3>
+                    <p>Rich chocolate flavor ice cream.</p>
+                    <span class="price">LKR 300</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Desserts">
+                    <img src="vanila ice cream.png" alt="Vanilla Ice Cream">
+                    <h3>Vanilla Ice Cream</h3>
+                    <p>Classic vanilla ice cream.</p>
+                    <span class="price">LKR 300</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Desserts">
+                    <img src="chocolate cake.png" alt="Chocolate Cake">
+                    <h3>Chocolate Cake</h3>
+                    <p>Decadent chocolate cake slice.</p>
+                    <span class="price">LKR 450</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Desserts">
+                    <img src="watalappan.png" alt="Watalappan">
+                    <h3>Watalappan</h3>
+                    <p>Traditional Sri Lankan coconut custard.</p>
+                    <span class="price">LKR 350</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+                <div class="food-card" data-category="Desserts">
+                    <img src="jelly.png" alt="Jelly">
+                    <h3>Jelly</h3>
+                    <p>Colorful fruit jelly dessert.</p>
+                    <span class="price">LKR 200</span>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- toast notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- cart panel -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-panel" id="cart-panel">
+        <button class="close-cart" id="close-cart">×</button>
+        <h2>Your Cart</h2>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-total">
+            <span>Total:</span>
+            <span id="cart-total-price">LKR 0</span>
+        </div>
+        <button id="checkout-btn" class="btn primary" style="margin-top:1rem;">Proceed to Checkout</button>
+    </div>
+
+    <button class="floating-cart-btn" id="floating-cart-btn" aria-label="Cart">🛒<span class="cart-count">0</span></button>
+
+    <footer class="site-footer">
+        <div class="footer-section">
+            <h4>Taste</h4>
+            <p>Delicious food made with love.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Contact</h4>
+            <p>Email: info@taste.com</p>
+            <p>Phone: +94 77 123 4567</p>
+        </div>
+        <div class="footer-section">
+            <h4>Address</h4>
+            <p>123 Food Street</p>
+            <p>Colombo, Sri Lanka</p>
+        </div>
+        <div class="footer-section social-icons">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+        </div>
+        <div class="footer-section" style="width:100%; text-align:center; margin-top:1rem; font-size:0.8rem; color:#777;">
+            &copy; 2026 Taste. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
