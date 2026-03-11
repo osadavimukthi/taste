@@ -117,8 +117,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // theme initialization
     const savedTheme = localStorage.getItem('taste-theme');
+    function applyThemeClass(theme) {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        } else {
+            document.documentElement.classList.remove('dark-mode');
+        }
+    }
     if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
+        applyThemeClass(savedTheme);
     }
     // update toggle text according to theme
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -127,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const current = document.documentElement.getAttribute('data-theme') || 'light';
         const next = current === 'light' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', next);
+        applyThemeClass(next);
         localStorage.setItem('taste-theme', next);
         modeToggle.classList.add('rotated');
         modeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
