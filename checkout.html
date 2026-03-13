@@ -85,7 +85,24 @@
             document.getElementById('back-menu').addEventListener('click', () => {
                 window.location.href = 'index.html';
             });
+            // helper for saving orders to localStorage
+            function appendOrder(order) {
+                const existing = localStorage.getItem('orders');
+                const orders = existing ? JSON.parse(existing) : [];
+                orders.push(order);
+                localStorage.setItem('orders', JSON.stringify(orders));
+            }
             document.getElementById('confirm-order').addEventListener('click', () => {
+                // create order object
+                const order = {
+                    id: Date.now(),
+                    items: cart,
+                    total: total,
+                    time: new Date().toLocaleString(),
+                    status: "Pending"
+                };
+                appendOrder(order);
+
                 alert('Order confirmed!');
                 localStorage.removeItem('taste-cart');
                 window.location.href = 'index.html';

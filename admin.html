@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Orders</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="logo-area">
+            <div class="logo-container">
+                <img src="logo.png" alt="Taste Logo" class="logo">
+                <h1 class="restaurant-name">Taste</h1>
+            </div>
+        </div>
+        <div class="search-area" style="flex:1; display:flex; justify-content:center;">
+            <!-- no search on admin -->
+        </div>
+        <div class="icons-area">
+            <button onclick="window.location.href='index.html'" class="back-btn">&larr; Home</button>
+            <button class="mode-toggle" aria-label="Toggle light/dark mode">🌙</button>
+        </div>
+    </header>
+
+    <main class="checkout admin">
+        <h1>Orders</h1>
+        <section class="order-section">
+            <h2>Pending Orders</h2>
+            <div id="pending-container" class="cards"></div>
+        </section>
+        <section class="order-section">
+            <h2>Preparing Orders</h2>
+            <div id="preparing-container" class="cards"></div>
+        </section>
+        <section class="order-section">
+            <h2>Completed Orders</h2>
+            <div id="completed-container" class="cards"></div>
+        </section>
+    </main>
+    <div id="admin-toast-container" class="toast-container"></div>
+    <div id="orderNotification" class="order-notification">
+        <span class="bell">🔔</span>
+        <span class="message">New order received!</span>
+    </div>
+    <audio id="order-sound"></audio>
+    <audio id="orderSound" src="notification.mp3"></audio>
+
+    <footer class="site-footer">
+        <div class="footer-sections">
+            <div class="footer-section">
+                <h4>Taste</h4>
+                <p>Delicious food made with love.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: <a href="mailto:info@taste.com">info@taste.com</a></p>
+                <p>Phone: +94 77 123 4567</p>
+            </div>
+            <div class="footer-section">
+                <h4>Address</h4>
+                <p>123 Food Street</p>
+                <p>Colombo, Sri Lanka</p>
+            </div>
+        </div>
+        <div class="footer-copy">&copy; 2026 Taste. All rights reserved.</div>
+    </footer>
+
+    <script>
+        function formatPrice(amount) {
+            return `LKR ${amount}`;
+        }
+
+        let prevOrdersCount = 0;
+        function loadOrders() {
+            const stored = localStorage.getItem('orders');
+            const orders = stored ? JSON.parse(stored) : [];
+            prevOrdersCount = orders.length;
+            const pendingCont = document.getElementById('pending-container');
+            const preparingCont = document.getElementById('preparing-container');
+            const completedCont = document.getElementById('completed-container');
+            pendingCont.innerHTML = '';
+            preparingCont.innerHTML = '';
+            completedCont.innerHTML = '';
+            if (orders.length === 0) {
+                pendingCont.innerHTML = '<p>No orders yet.</p>';
+                return;
+            }
+            orders.forEach(order => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+                // add status class for coloring
+                card.classList.add(`status-${order.status.toLowerCase()}`);
+                const itemsHtml = order.items.map(i => `<div>${i.name} x${i.quantity}</div>`).join('');
+                let actionHtml = '';
+                if (order.status === 'Pending') {
+                    actionHtml = `<button class="status-btn" data-id="${order.id}">Prepare Order</button>`;
+                } else if (order.status === 'Preparing') {
+                    actionHtml = `<button class="status-btn" data-id="${order.id}">Complete Order</button>`;
+                } else if (order.status === 'Completed') {
+                    actionHtml = `<span class="status-label">Completed</span>`;
+                }
+
+                card.innerHTML = `
+                    <h3>Order #${order.id}</h3>
+                    <p><strong>Time:</strong> ${order.time}</p>
+                    <p><strong>Status:</strong> ${order.status}</p>
+                    <p><strong>Total:</strong> ${formatPrice(order.total)}</p>
+                    <div class="order-items">${itemsHtml}</div>
+                    ${actionHtml}
+                `;
+                if (order.status === 'Pending') {
+                    pendingCont.appendChild(card);
+                } else if (order.status === 'Preparing') {
+                    preparingCont.appendChild(card);
+                } else if (order.status === 'Completed') {
+                    completedCont.appendChild(card);
+                } else {
+                    // unknown status goes to pending by default
+                    pendingCont.appendChild(card);
+                }
+            });
+            bindStatusButtons();
+        }
+
+        function updateOrderStatus(id, newStatus) {
+            const stored = localStorage.getItem('orders');
+            const orders = stored ? JSON.parse(stored) : [];
+            const idx = orders.findIndex(o => o.id == id);
+            if (idx !== -1) {
+                orders[idx].status = newStatus;
+                localStorage.setItem('orders', JSON.stringify(orders));
+            }
+        }
+
+        function bindStatusButtons() {
+            const buttons = document.querySelectorAll('.status-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    const card = btn.closest('.order-card');
+                    const statusEl = card.querySelector('p:nth-of-type(2)');
+                    const currentStatus = statusEl.textContent.replace('Status:', '').trim();
+                    let nextStatus = '';
+                    if (currentStatus === 'Pending') nextStatus = 'Preparing';
+                    else if (currentStatus === 'Preparing') nextStatus = 'Completed';
+                    if (nextStatus) {
+                        updateOrderStatus(id, nextStatus);
+                        loadOrders();
+                    }
+                });
+            });
+        }
+
+        function showAdminToast(message) {
+            const container = document.getElementById('admin-toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function showOrderNotification(message) {
+            const notif = document.createElement('div');
+            notif.className = 'order-notification';
+            notif.innerHTML = '🔔 ' + message;
+            document.body.appendChild(notif);
+            // force reflow then show
+            requestAnimationFrame(() => {
+                notif.style.opacity = '1';
+            });
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                notif.addEventListener('transitionend', () => notif.remove());
+            }, 3500);
+        }
+
+        function showNewOrderNotification() {
+            const popup = document.getElementById('orderNotification');
+            if (!popup) return;
+            popup.classList.add('show');
+            // play notification sound if available
+            const audio = document.getElementById('orderSound');
+            if (audio) {
+                audio.play().catch(() => {});
+            }
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 4000);
+        }
+
+        function playOrderSound() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.type = 'sine';
+            o.frequency.value = 440;
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.start();
+            g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.2);
+            o.stop(ctx.currentTime + 0.2);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrders();
+
+            // reuse theme toggle behavior from other pages
+            const modeToggle = document.querySelector('.mode-toggle');
+            const savedTheme = localStorage.getItem('taste-theme');
+            function applyThemeClass(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                }
+            }
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                applyThemeClass(savedTheme);
+            }
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            modeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+            modeToggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                const next = current === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', next);
+                applyThemeClass(next);
+                localStorage.setItem('taste-theme', next);
+                modeToggle.classList.add('rotated');
+                modeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+                setTimeout(() => modeToggle.classList.remove('rotated'), 500);
+            });
+
+            // watch for orders key changes in other tabs/windows
+            window.addEventListener('storage', function(event) {
+                if (event.key === 'orders') {
+                    const newOrders = event.newValue ? JSON.parse(event.newValue) : [];
+                    if (newOrders.length > prevOrdersCount) {
+                        showAdminToast('New order received!');
+                        showNewOrderNotification();
+                        playOrderSound();
+                    }
+                    loadOrders();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
